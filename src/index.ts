@@ -50,21 +50,29 @@ const updateGameState = () => {
 
         switch (direction) {
             case directions.NORTH:
-                nextHead[coordinates.Y] = nextHead[coordinates.Y] - 1
+                nextHead[coordinates.Y] = (nextHead[coordinates.Y] - 1)  % gameHeight
                 break
             case directions.SOUTH:
-                nextHead[coordinates.Y] = nextHead[coordinates.Y] + 1
+                nextHead[coordinates.Y] = (nextHead[coordinates.Y] + 1)  % gameHeight
                 break
             case directions.EAST:
-                nextHead[coordinates.X] = nextHead[coordinates.X] + 1
+                nextHead[coordinates.X] = (nextHead[coordinates.X] + 1) % gameWidth
                 break
             case directions.WEST:
-                nextHead[coordinates.X] = nextHead[coordinates.X] - 1
+                nextHead[coordinates.X] = (nextHead[coordinates.X] - 1) % gameWidth
                 break
             default:
                 throw new Error('invalid direction')
         }
 
+        if (nextHead[coordinates.X] < 0) {
+            nextHead[coordinates.X] = gameWidth
+        }
+
+        if (nextHead[coordinates.Y] < 0) {
+            nextHead[coordinates.Y] = gameHeight
+        }
+        
         snake = [...snake.slice(1, snake.length), nextHead]
 
         lastDiff = diff - gameSpeed
