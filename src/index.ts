@@ -95,6 +95,12 @@ const render = () => {
         context.fillStyle = '#10120F'
         context.fillRect(x * cellWidth + 1, y * cellHeight + 1, cellWidth - 2, cellHeight - 2)
     }
+
+    if (paused) {
+        context.font = '250px arcade-classic'
+        const textSize = context.measureText('PAUSED')
+        context.fillText('PAUSED', width / 2 - textSize.width / 2, height / 2)
+    }
 }
 
 const keys = {
@@ -128,14 +134,14 @@ const handleInput = (event: KeyboardEvent) => {
             }
             break
         case keys.ENTER:
-                if (paused) {
-                    paused = false
-                    last = performance.now()
-                } else {
-                    paused = true
-                }
-                beep(50, 1000, 50)
-                break
+            if (paused) {
+                paused = false
+                last = performance.now()
+            } else {
+                paused = true
+            }
+            beep(50, 1000, 50)
+            break
         default:
             console.log('unhandled keydown:', event.key)
     }
