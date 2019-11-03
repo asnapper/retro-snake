@@ -38,6 +38,23 @@ let snake = [
     [50, 59]
 ]
 
+let apples = [
+    [0, 0],
+    [
+        Math.floor(Math.random() * gameWidth),
+        Math.floor(Math.random() * gameHeight)
+    ],
+    [
+        Math.floor(Math.random() * gameWidth),
+        Math.floor(Math.random() * gameHeight)
+    ],
+    [
+        Math.floor(Math.random() * gameWidth),
+        Math.floor(Math.random() * gameHeight)
+    ],
+    [gameWidth - 1, gameHeight - 1]
+]
+
 let paused = true
 let last = performance.now()
 let lastDiff = 0
@@ -90,12 +107,23 @@ const render = () => {
     context.fillStyle = '#70806C'
     context.fillRect(0, 0, width, height)
 
+    // render snake
     for (let i = 0; i < snake.length; i++) {
         const [x, y] = snake[i]
         context.fillStyle = '#10120F'
         context.fillRect(x * cellWidth + 1, y * cellHeight + 1, cellWidth - 2, cellHeight - 2)
     }
 
+    // render apples
+    for (let i = 0; i < apples.length; i++) {
+        const [x, y] = apples[i]
+        context.beginPath()
+        context.fillStyle = '#10120F'
+        context.arc(x * cellWidth + cellWidth / 2, y * cellHeight + cellHeight / 2, (cellWidth) / 2 - 1 , 0, 2 * Math.PI)
+        context.fill()
+    }
+
+    // render pause message
     if (paused) {
         context.font = '250px arcade-classic'
         const textSize = context.measureText('PAUSED')
