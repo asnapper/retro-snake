@@ -1,3 +1,5 @@
+import { beep } from './sound'
+
 const canvas: HTMLCanvasElement = document.getElementById('game') as HTMLCanvasElement
 const context = canvas.getContext('2d')
 const width = canvas.width
@@ -132,6 +134,7 @@ const handleInput = (event: KeyboardEvent) => {
                 } else {
                     paused = true
                 }
+                beep(50, 1000, 50)
                 break
         default:
             console.log('unhandled keydown:', event.key)
