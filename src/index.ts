@@ -1,4 +1,5 @@
 import { beep } from './sound'
+import * as apples from './apples'
 
 const canvas: HTMLCanvasElement = document.getElementById('game') as HTMLCanvasElement
 const context = canvas.getContext('2d')
@@ -7,7 +8,7 @@ const height = canvas.height
 
 const gameHeight = 100
 const gameWidth = 100
-const gameSpeed = 50
+let gameSpeed = 50
 const cellHeight = height / gameHeight
 const cellWidth = width / gameWidth
 
@@ -38,22 +39,39 @@ let snake = [
     [50, 59]
 ]
 
-let apples = [
-    [0, 0],
-    [
-        Math.floor(Math.random() * gameWidth),
-        Math.floor(Math.random() * gameHeight)
-    ],
-    [
-        Math.floor(Math.random() * gameWidth),
-        Math.floor(Math.random() * gameHeight)
-    ],
-    [
-        Math.floor(Math.random() * gameWidth),
-        Math.floor(Math.random() * gameHeight)
-    ],
-    [gameWidth - 1, gameHeight - 1]
-]
+const addRandomApples = (num: number = 5) => {
+    for(let i = 0; i < num; i++) {
+        apples.add(Math.floor(Math.random() * gameWidth), Math.floor(Math.random() * gameHeight))
+    }
+}
+
+addRandomApples()
+
+let allApples = apples.all()
+
+// let apples = [
+//     [0, 0],
+//     [
+        // Math.floor(Math.random() * gameWidth),
+        // Math.floor(Math.random() * gameHeight)
+//     ],
+//     [
+//         Math.floor(Math.random() * gameWidth),
+//         Math.floor(Math.random() * gameHeight)
+//     ],
+//     [
+//         Math.floor(Math.random() * gameWidth),
+//         Math.floor(Math.random() * gameHeight)
+//     ],
+//     [gameWidth - 1, gameHeight - 1]
+// ]
+
+// let appleIndex: any = {}
+
+// apples.forEach(([x, y]) => {
+//     appleIndex[x] = appleIndex[x] || {}
+//     appleIndex[x][y] = true
+// })
 
 let paused = true
 let last = performance.now()
@@ -65,6 +83,9 @@ const updateGameState = () => {
     last = now
 
     if (diff > gameSpeed) {
+        if (allApples.length == 0) {
+            addRandomApples()
+        }
         const snakeHead = snake[snake.length - 1]
         const nextHead = [...snakeHead]
 
@@ -93,7 +114,15 @@ const updateGameState = () => {
             nextHead[coordinates.Y] = gameHeight
         }
 
-        snake = [...snake.slice(1, snake.length), nextHead]
+        const [ x, y ] = nextHead
+        let grow = false
+        if (apples.exists(x, y)) {
+            apples.remove(x, y)
+            grow = true
+            gameSpeed--
+        }
+
+        snake = [...snake.slice(grow ? 0 : 1, snake.length), nextHead]
 
         lastDiff = diff - gameSpeed
 
@@ -115,8 +144,9 @@ const render = () => {
     }
 
     // render apples
-    for (let i = 0; i < apples.length; i++) {
-        const [x, y] = apples[i]
+    allApples = apples.all()
+    for (let i = 0; i < allApples.length; i++) {
+        const [x, y] = allApples[i]
         context.beginPath()
         context.fillStyle = '#10120F'
         context.arc(x * cellWidth + cellWidth / 2, y * cellHeight + cellHeight / 2, (cellWidth) / 2 - 1 , 0, 2 * Math.PI)
