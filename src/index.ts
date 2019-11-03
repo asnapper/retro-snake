@@ -36,6 +36,7 @@ let snake = [
     [50, 59]
 ]
 
+let paused = true
 let last = performance.now()
 let lastDiff = 0
 
@@ -50,10 +51,10 @@ const updateGameState = () => {
 
         switch (direction) {
             case directions.NORTH:
-                nextHead[coordinates.Y] = (nextHead[coordinates.Y] - 1)  % gameHeight
+                nextHead[coordinates.Y] = (nextHead[coordinates.Y] - 1) % gameHeight
                 break
             case directions.SOUTH:
-                nextHead[coordinates.Y] = (nextHead[coordinates.Y] + 1)  % gameHeight
+                nextHead[coordinates.Y] = (nextHead[coordinates.Y] + 1) % gameHeight
                 break
             case directions.EAST:
                 nextHead[coordinates.X] = (nextHead[coordinates.X] + 1) % gameWidth
@@ -72,7 +73,7 @@ const updateGameState = () => {
         if (nextHead[coordinates.Y] < 0) {
             nextHead[coordinates.Y] = gameHeight
         }
-        
+
         snake = [...snake.slice(1, snake.length), nextHead]
 
         lastDiff = diff - gameSpeed
@@ -84,11 +85,9 @@ const updateGameState = () => {
 
 const render = () => {
 
-
     context.fillStyle = '#70806C'
     context.fillRect(0, 0, width, height)
 
-    // render the snake
     for (let i = 0; i < snake.length; i++) {
         const [x, y] = snake[i]
         context.fillStyle = '#10120F'
@@ -100,7 +99,8 @@ const keys = {
     UP: 'ArrowUp',
     DOWN: 'ArrowDown',
     LEFT: 'ArrowLeft',
-    RIGHT: 'ArrowRight'
+    RIGHT: 'ArrowRight',
+    ENTER: 'Enter'
 }
 
 const handleInput = (event: KeyboardEvent) => {
@@ -125,6 +125,14 @@ const handleInput = (event: KeyboardEvent) => {
                 direction = directions.EAST
             }
             break
+        case keys.ENTER:
+                if (paused) {
+                    paused = false
+                    last = performance.now()
+                } else {
+                    paused = true
+                }
+                break
         default:
             console.log('unhandled keydown:', event.key)
     }
@@ -135,7 +143,9 @@ window.addEventListener('keydown', handleInput)
 
 const gameLoop = () => {
     render()
-    updateGameState()
+    if (!paused) {
+        updateGameState()
+    }
     requestAnimationFrame(gameLoop)
 }
 
