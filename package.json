@@ -1,0 +1,17 @@
+{
+  "name": "retro-snake",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "author": "Matthias Löffel",
+  "repository": "https://github.com/asnapper/retro-snake.git",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.23.3",
+    "typescript": "^3.6.4"
+  }
+}
