@@ -74,8 +74,10 @@ let allApples = apples.all()
 // })
 
 let paused = true
+let failed = false
 let last = performance.now()
 let lastDiff = 0
+let score = 0
 
 const updateGameState = () => {
     const now = performance.now()
@@ -118,8 +120,15 @@ const updateGameState = () => {
         let grow = false
         if (apples.exists(x, y)) {
             apples.remove(x, y)
+            beep(50, 1500, 30)
             grow = true
             gameSpeed--
+            score++
+        } else if (!!snake.find(p => p[coordinates.X] == x && p[coordinates.Y] == y)) {
+            failed = true
+            beep(90, 200, 100)
+            beep(90, 200, 100)
+            beep(90, 200, 100)
         }
 
         snake = [...snake.slice(grow ? 0 : 1, snake.length), nextHead]
@@ -153,11 +162,24 @@ const render = () => {
         context.fill()
     }
 
+    //render score
+    context.font = '50px arcade-classic'
+    const scoreText = 'Score: 000' + score
+    const textSize = context.measureText(scoreText)
+    context.fillText(scoreText, width - textSize.width - 10, 60)
+
     // render pause message
     if (paused) {
         context.font = '250px arcade-classic'
         const textSize = context.measureText('PAUSED')
         context.fillText('PAUSED', width / 2 - textSize.width / 2, height / 2)
+    }
+
+    // render pause message
+    if (failed) {
+        context.font = '240px arcade-classic'
+        const textSize = context.measureText('YOU SUCK')
+        context.fillText('YOU SUCK', width / 2 - textSize.width / 2, height / 2)
     }
 }
 
@@ -192,8 +214,9 @@ const handleInput = (event: KeyboardEvent) => {
             }
             break
         case keys.ENTER:
-            if (paused) {
+            if (paused || failed) {
                 paused = false
+                failed = false
                 last = performance.now()
             } else {
                 paused = true
@@ -210,7 +233,7 @@ window.addEventListener('keydown', handleInput)
 
 const gameLoop = () => {
     render()
-    if (!paused) {
+    if (!paused && !failed) {
         updateGameState()
     }
     requestAnimationFrame(gameLoop)
