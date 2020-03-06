@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "arcade-classic";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/ARCADECLASSIC.ba7db66a.TTF") format("truetype");
+}
+body {
+  overflow: hidden;
+}
+
+body::before {
+  display: block;
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-image: url("/7110.44a44280.png");
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position-y: -200px;
+  background-position-x: -200px;
+}
+
+#game {
+  position: absolute;
+  z-index: -1;
+  top: 205px;
+  left: 120px;
+  border: solid 1px #e0e0e0;
+  width: 750px;
+  height: 750px;
+}
+
+/*# sourceMappingURL=/styles.164d45a1.css.map */

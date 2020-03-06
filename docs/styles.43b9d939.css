@@ -1,0 +1,2 @@
+@font-face{font-family:arcade-classic;font-style:normal;font-weight:400;src:url(/ARCADECLASSIC.6a598a79.TTF) format("truetype")}body{overflow:hidden}body:before{display:block;position:absolute;content:"";width:100%;height:100%;background-image:url(/7110.39359e5b.png);background-repeat:no-repeat;background-size:80%;background-position-y:-200px;background-position-x:-200px}#game{position:absolute;z-index:-1;top:205px;left:120px;border:1px solid #e0e0e0;width:750px;height:750px}
+/*# sourceMappingURL=/styles.43b9d939.css.map */
